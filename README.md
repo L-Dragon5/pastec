@@ -27,7 +27,7 @@ Setup
 
 
 ## Compilation ###
- Dependancies To be compiled, Pastec requires [OpenCV 3.X](https://web.archive.org/web/20201207220940/http://www.opencv.org/) and [libmicrohttpd](https://web.archive.org/web/20201207220940/http://www.gnu.org/software/libmicrohttpd/) and libcurl. On **Ubuntu 18.04**, those package can be installed using the following command:
+ Dependancies To be compiled, Pastec requires [OpenCV 4.X](https://opencv.org/) and [libmicrohttpd](http://www.gnu.org/software/libmicrohttpd/) and libcurl. On **Ubuntu 18.04**, those package can be installed using the following command:
 
 <pre data-language="shell">sudo apt-get install libopencv-dev libmicrohttpd-dev
 </pre>
@@ -39,7 +39,7 @@ If you are using another distribution or operating system, you may have to compi
 
 To compile Pastec, first get the sources with the following command:
 
-<pre data-language="shell">git clone https://github.com/Visu4link/pastec.git
+<pre data-language="shell">git clone https://github.com/L-Dragon5/pastec.git
 cd pastec
 </pre>
 
@@ -57,6 +57,18 @@ cmake ../
 Finally, run make to compile Pastec:
 
 <pre data-language="shell">make
+</pre>
+
+## Full Installation Instructions
+<pre data-language="shell">
+apt-get update
+apt-get install -y curl wget libcurl4-openssl-dev libopencv-dev libmicrohttpd-dev libjsoncpp-dev cmake git
+git clone https://github.com/L-Dragon5/pastec.git /pastec
+mkdir -p /pastec/build && mkdir /pastec/data
+cd /pastec/build
+cmake ../ && make
+cp /pastec/visualWordsORB.dat /pastec/data
+./pastec -p 4212 /pastec/data/visualWordsORB.dat
 </pre>
 
 ## Running
