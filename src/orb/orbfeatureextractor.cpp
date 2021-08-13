@@ -32,7 +32,7 @@
 
 
 ORBFeatureExtractor::ORBFeatureExtractor(ORBIndex *index, ORBWordIndex *wordIndex)
-    : index(index), wordIndex(wordIndex), orb(ORB::create(2000, 1.02, 100))
+    : index(index), wordIndex(wordIndex), detector(ORB::create(2000, 1.02, 100)), descriptor(BEBLID::create(1.00))
 { }
 
 
@@ -49,7 +49,8 @@ u_int32_t ORBFeatureExtractor::processNewImage(unsigned i_imageId, unsigned i_im
     vector<KeyPoint> keypoints;
     Mat descriptors;
 
-    orb->detectAndCompute(img, noArray(), keypoints, descriptors);
+    detector->detect(img, keypoints);
+    descriptor->compute(img, keypoints, descriptors);
     i_nbFeaturesExtracted = keypoints.size();
 
     unsigned i_nbKeyPoints = 0;
@@ -84,16 +85,6 @@ u_int32_t ORBFeatureExtractor::processNewImage(unsigned i_imageId, unsigned i_im
             }
         }
     }
-
-#if 0
-    // Draw keypoints.
-    Mat img_res;
-    drawKeypoints(img, keypoints, img_res, Scalar::all(-1), DrawMatchesFlags::DEFAULT);
-
-    // Show the image.
-    imshow("Keypoints 1", img_res);
-    waitKey();
-#endif
 
     // Record the hits.
     return index->addImage(i_imageId, imageHits);

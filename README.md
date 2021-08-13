@@ -141,6 +141,28 @@ This call removes the signature of an image in the index thanks to its id. Be ca
         }
         </pre>
 
+### Search for similar images from the index
+
+This call allows to add the signature of an image in the index to make it available for searching. You need to provide the compressed binary data of the image and an id to identify it.
+
+*   **Path:** /index/images/<image id>
+*   **HTTP method:** GET
+*   **Data:** the id of the image in the index
+*   **Answer:** "SEARCH_RESULTS" as type field and a list of the the matched image ids from the most to the least relevant one in the "image_ids" field
+*   **Example:**
+    *   Command line with id:
+
+        <pre data-language="shell">curl -X GET http://localhost:4212/index/images/23
+        </pre>
+
+    *   Answer:
+
+        <pre data-language="json">{
+           "image_ids" : [ 2, 5, 43 ],
+           "type" : "SEARCH_RESULTS"
+        }
+        </pre>
+
 ### Search request
 
 This call performs a search in the index thanks to a request image. It returns the id of the matched images from the most to the least relevant ones.
@@ -185,6 +207,7 @@ This call erases all the data currently contained in the index.
 
 *   **Path:** /index/io
 *   **HTTP method:** POST
+*   **Data:** a json with a type field of value "CLEAR".
 *   **Answer type:** "INDEX_CLEARED"
 *   **Possible error types:** -
 *   **Example:**
