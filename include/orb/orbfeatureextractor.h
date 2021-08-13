@@ -53,7 +53,8 @@ public:
 private:
     ORBIndex *index;
     ORBWordIndex *wordIndex;
-    Ptr<ORB> orb;
+    Ptr<ORB> detector;
+    Ptr<BEBLID> descriptor;
 };
 
 #endif // PASTEC_ORBFEATUREEXTRACTOR_H
