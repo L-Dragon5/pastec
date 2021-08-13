@@ -91,7 +91,7 @@ bool RequestHandler::testURIWithPattern(vector<string> parsedURI, string p_patte
             // Test we have a number here.
             if (parsedURI[i].length() == 0)
                 return false;
-            char* p;
+            u_char* p;
             long n = strtol(parsedURI[i].c_str(), &p, 10);
             if (*p != 0)
                 return false;
@@ -153,7 +153,7 @@ void RequestHandler::handleRequest(ConnectionInfo &conInfo)
             string imgURL = data["url"].asString();
             if (imgDownloader->canDownloadImage(imgURL))
             {
-                std::vector<char> imgData;
+                std::vector<u_char> imgData;
                 long HTTPResponseCode;
                 i_ret = imgDownloader->getImageData(imgURL, imgData, HTTPResponseCode);
                 if (i_ret == OK)
@@ -219,7 +219,7 @@ void RequestHandler::handleRequest(ConnectionInfo &conInfo)
             string imgURL = data["url"].asString();
             if (imgDownloader->canDownloadImage(imgURL))
             {
-                std::vector<char> imgData;
+                std::vector<u_char> imgData;
                 long HTTPResponseCode;
                 i_ret = imgDownloader->getImageData(imgURL, imgData, HTTPResponseCode);
                 if (i_ret == OK)

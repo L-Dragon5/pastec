@@ -29,9 +29,9 @@
 #include <messages.h>
 
 
-u_int32_t ImageLoader::loadImage(unsigned i_imgSize, char *p_imgData, Mat &img)
+u_int32_t ImageLoader::loadImage(unsigned i_imgSize, u_char *p_imgData, Mat &img)
 {
-    vector<char> imgData(i_imgSize);
+    vector<u_char> imgData(i_imgSize);
     memcpy(imgData.data(), p_imgData, i_imgSize);
 
     try
@@ -40,7 +40,7 @@ u_int32_t ImageLoader::loadImage(unsigned i_imgSize, char *p_imgData, Mat &img)
     }
     catch (cv::Exception& e) // The decoding of an image can raise an exception.
     {
-        const char* err_msg = e.what();
+        const u_char* err_msg = e.what();
         cout << "Exception caught: " << err_msg << endl;
         return IMAGE_NOT_DECODED;
     }

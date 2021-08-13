@@ -36,11 +36,11 @@ public:
     ImageDownloader();
 
     bool canDownloadImage(std::string imgURL);
-    u_int32_t getImageData(std::string imgURL, std::vector<char> &imgData,
+    u_int32_t getImageData(std::string imgURL, std::vector<u_char> &imgData,
                            long &responseCode);
 
 private:
-    static size_t writeCallback(char *ptr, size_t size, size_t nmemb, void *userdata);
+    static size_t writeCallback(u_char *ptr, size_t size, size_t nmemb, void *userdata);
 
 };
 

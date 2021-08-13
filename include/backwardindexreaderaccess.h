@@ -40,7 +40,7 @@ public:
     virtual ~BackwardIndexReaderAccess() {}
     virtual bool open(string indexPath) = 0;
     virtual void moveAt(u_int64_t pos) = 0;
-    virtual void read(char *p_data, unsigned i_nbBytes) = 0;
+    virtual void read(u_char *p_data, unsigned i_nbBytes) = 0;
     virtual bool endOfIndex() = 0;
     virtual void reset() = 0;
     virtual void close() = 0;
@@ -63,7 +63,7 @@ public:
         ifs.seekg(pos);
     }
 
-    virtual void read(char *p_data, unsigned i_nbBytes)
+    virtual void read(u_char *p_data, unsigned i_nbBytes)
     {
         ifs.read(p_data, i_nbBytes);
     }
@@ -105,7 +105,7 @@ public:
         i_fileSize = ifs.tellg();
 
         // Try to allocate the needed size for the entire file.
-        p_indexData = new char[i_fileSize];
+        p_indexData = new u_char[i_fileSize];
         if (p_indexData == NULL)
         {
             cout << "Couldn't allocate the space to store the backward index file in memory." << endl;
@@ -134,7 +134,7 @@ public:
         i_curPos = pos;
     }
 
-    virtual void read(char *p_data, unsigned i_nbBytes)
+    virtual void read(u_char *p_data, unsigned i_nbBytes)
     {
         memcpy(p_data, p_indexData + i_curPos, i_nbBytes);
         i_curPos += i_nbBytes;
@@ -156,7 +156,7 @@ public:
     }
 
 private:
-    char *p_indexData;
+    u_char *p_indexData;
     u_int64_t i_fileSize;
     u_int64_t i_curPos;
 };

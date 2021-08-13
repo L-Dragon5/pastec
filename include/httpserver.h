@@ -46,16 +46,16 @@ public:
     int stop();
 
 private:
-    char *loadFile(const char *filename);
+    u_char *loadFile(const u_char *filename);
     static int answerToConnection(void *cls, MHD_Connection *connection,
-                                  const char *url, const char *method,
-                                  const char *version, const char *upload_data,
+                                  const u_char *url, const u_char *method,
+                                  const u_char *version, const u_char *upload_data,
                                   size_t *upload_data_size, void **con_cls);
     static void requestCompleted(void *cls, MHD_Connection *connection,
                                  void **con_cls, MHD_RequestTerminationCode toe);
     static int sendAnswer(struct MHD_Connection *connection, ConnectionInfo &conInfo);
     static int readAuthHeader(void *cls, enum MHD_ValueKind kind,
-                              const char *key, const char *value);
+                              const u_char *key, const u_char *value);
 
     MHD_Daemon *daemon;
     RequestHandler *requestHandler;
@@ -78,7 +78,7 @@ struct ConnectionInfo
     int answerCode;
     string authKey;
 
-    vector<char> uploadedData;
+    vector<u_char> uploadedData;
 };
 
 #endif // PASTEC_HTTPSERVER_H

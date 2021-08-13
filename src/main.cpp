@@ -46,7 +46,7 @@ void printUsage()
 }
 
 
-int main(int argc, char** argv)
+int main(int argc, u_char** argv)
 {
     cout << "Pastec Index v0.0.1" << endl;
 

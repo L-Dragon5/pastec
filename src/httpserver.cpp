@@ -52,14 +52,14 @@ HTTPServer::~HTTPServer()
 }
 
 
-char *HTTPServer::loadFile(const char *filename)
+u_char *HTTPServer::loadFile(const u_char *filename)
 {
     ifstream file(filename, std::ios::binary);
     file.seekg(0, std::ios::end);
     std::streamsize size = file.tellg();
     file.seekg(0, std::ios::beg);
 
-    char *buffer = new(std::nothrow) char[size];
+    u_char *buffer = new(std::nothrow) u_char[size];
 
     if (buffer == NULL)
         return NULL;
@@ -73,8 +73,8 @@ char *HTTPServer::loadFile(const char *filename)
 
 int HTTPServer::run()
 {
-    char *key_pem;
-    char *cert_pem;
+    u_char *key_pem;
+    u_char *cert_pem;
 
     if (https)
     {
@@ -140,7 +140,7 @@ int HTTPServer::sendAnswer(struct MHD_Connection *connection, ConnectionInfo &co
     int ret;
     struct MHD_Response *response;
 
-    const char *buffer = conInfo.answerString.c_str();
+    const u_char *buffer = conInfo.answerString.c_str();
 
     response = MHD_create_response_from_buffer(strlen(buffer),
                                                (void *)buffer,
@@ -174,8 +174,8 @@ void HTTPServer::requestCompleted(void *cls, MHD_Connection *connection,
 
 
 int HTTPServer::answerToConnection(void *cls, MHD_Connection *connection,
-                                   const char *url, const char *method,
-                                   const char *version, const char *upload_data,
+                                   const u_char *url, const u_char *method,
+                                   const u_char *version, const u_char *upload_data,
                                    size_t *upload_data_size, void **conCls)
 {
     (void)version;
@@ -232,7 +232,7 @@ int HTTPServer::answerToConnection(void *cls, MHD_Connection *connection,
 
 
 int HTTPServer::readAuthHeader(void *cls, enum MHD_ValueKind kind,
-                               const char *key, const char *value)
+                               const u_char *key, const u_char *value)
 {
     (void) kind;
     ConnectionInfo *conInfo = (ConnectionInfo *)cls;

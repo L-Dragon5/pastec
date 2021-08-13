@@ -40,7 +40,7 @@ bool ImageDownloader::canDownloadImage(std::string imgURL)
 }
 
 
-u_int32_t ImageDownloader::getImageData(std::string imgURL, std::vector<char> &imgData,
+u_int32_t ImageDownloader::getImageData(std::string imgURL, std::vector<u_char> &imgData,
                                         long &responseCode)
 {
     if (!canDownloadImage(imgURL))
@@ -80,9 +80,9 @@ u_int32_t ImageDownloader::getImageData(std::string imgURL, std::vector<char> &i
 }
 
 
-size_t ImageDownloader::writeCallback(char *ptr, size_t size, size_t nmemb, void *userdata)
+size_t ImageDownloader::writeCallback(u_char *ptr, size_t size, size_t nmemb, void *userdata)
 {
-    std::vector<char> *imgData = (std::vector<char> *)userdata;
+    std::vector<u_char> *imgData = (std::vector<u_char> *)userdata;
 
     size_t sizeToWrite = size * nmemb;
     imgData->insert(imgData->end(), ptr, ptr + sizeToWrite);
