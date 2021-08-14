@@ -29,7 +29,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 
 #include <thread.h>
 #include <searchResult.h>

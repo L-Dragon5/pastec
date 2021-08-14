@@ -33,7 +33,6 @@
 #include <index.h>
 
 #include <imageloader.h>
-#include <opencv2/highgui/highgui.hpp>
 
 
 RequestHandler::RequestHandler(FeatureExtractor *featureExtractor,

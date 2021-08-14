@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 #include <opencv2/flann.hpp>
 
 using namespace cv;

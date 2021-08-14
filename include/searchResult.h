@@ -22,7 +22,7 @@
 #ifndef PASTEC_SEARCHRESULT_H
 #define PASTEC_SEARCHRESULT_H
 
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
 
 using namespace cv;
 

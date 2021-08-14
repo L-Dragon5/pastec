@@ -22,8 +22,8 @@
 #include <iostream>
 #include <vector>
 
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include <imageloader.h>
 #include <messages.h>
@@ -31,7 +31,7 @@
 
 u_int32_t ImageLoader::loadImage(unsigned i_imgSize, u_char *p_imgData, Mat &img)
 {
-    vector<char> imgData(i_imgSize);
+    vector<u_char> imgData(i_imgSize);
     memcpy(imgData.data(), p_imgData, i_imgSize);
 
     try
