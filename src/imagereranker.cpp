@@ -61,6 +61,8 @@ void *RANSACThread::run()
             }
         }
     }
+    
+    return NULL;
 }
 
 
