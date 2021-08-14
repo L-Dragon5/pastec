@@ -26,6 +26,8 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/flann/flann.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/xfeatures2d.hpp>
 
 #include <searcher.h>
 #include <orbindex.h>
@@ -35,6 +37,7 @@
 
 using namespace cv;
 using namespace std;
+using namespace cv::xfeatures2d;
 
 class ClientConnection;
 

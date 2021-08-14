@@ -39,6 +39,7 @@ class ClientConnection;
 
 using namespace cv;
 using namespace std;
+using namespace cv::xfeatures2d;
 
 
 class ORBFeatureExtractor : public FeatureExtractor
