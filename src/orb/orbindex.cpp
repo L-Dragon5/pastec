@@ -386,7 +386,7 @@ u_int32_t ORBIndex::write(string backwardIndexPath)
 
     cout << "Writing the number of occurences." << endl;
     for (unsigned i = 0; i < NB_VISUAL_WORDS; ++i)
-        ofs.write((u_char *)(nbOccurences + i), sizeof(u_int64_t));
+        ofs.write((char *)(nbOccurences + i), sizeof(u_int64_t));
 
     cout << "Writing the index hits." << endl;
     for (unsigned i = 0; i < NB_VISUAL_WORDS; ++i)
@@ -396,10 +396,10 @@ u_int32_t ORBIndex::write(string backwardIndexPath)
         for (unsigned j = 0; j < wordHits.size(); ++j)
         {
             const Hit &hit = wordHits[j];
-            ofs.write((u_char *)(&hit.i_imageId), sizeof(u_int32_t));
-            ofs.write((u_char *)(&hit.i_angle), sizeof(u_int16_t));
-            ofs.write((u_char *)(&hit.x), sizeof(u_int16_t));
-            ofs.write((u_char *)(&hit.y), sizeof(u_int16_t));
+            ofs.write((char *)(&hit.i_imageId), sizeof(u_int32_t));
+            ofs.write((char *)(&hit.i_angle), sizeof(u_int16_t));
+            ofs.write((char *)(&hit.x), sizeof(u_int16_t));
+            ofs.write((char *)(&hit.y), sizeof(u_int16_t));
         }
     }
 
@@ -468,7 +468,7 @@ u_int32_t ORBIndex::load(string backwardIndexPath)
         u_int64_t i_offset = NB_VISUAL_WORDS * sizeof(u_int64_t);
         for (unsigned i = 0; i < NB_VISUAL_WORDS; ++i)
         {
-            indexAccess.read((u_char *)(nbOccurences + i), sizeof(u_int64_t));
+            indexAccess.read((char *)(nbOccurences + i), sizeof(u_int64_t));
             wordOffSet[i] = i_offset;
             i_offset += nbOccurences[i] * BACKWARD_INDEX_ENTRY_SIZE;
         }
@@ -480,12 +480,12 @@ u_int32_t ORBIndex::load(string backwardIndexPath)
         {
             u_int32_t i_imageId;
             u_int16_t i_angle, x, y;
-            indexAccess.read((u_char *)&i_imageId, sizeof(u_int32_t));
+            indexAccess.read((char *)&i_imageId, sizeof(u_int32_t));
             if (indexAccess.endOfIndex())
                 break;
-            indexAccess.read((u_char *)&i_angle, sizeof(u_int16_t));
-            indexAccess.read((u_char *)&x, sizeof(u_int16_t));
-            indexAccess.read((u_char *)&y, sizeof(u_int16_t));
+            indexAccess.read((char *)&i_angle, sizeof(u_int16_t));
+            indexAccess.read((char *)&x, sizeof(u_int16_t));
+            indexAccess.read((char *)&y, sizeof(u_int16_t));
             nbWords[i_imageId]++;
             totalNbRecords++;
         }
@@ -506,10 +506,10 @@ u_int32_t ORBIndex::load(string backwardIndexPath)
             {
                 u_int32_t i_imageId;
                 u_int16_t i_angle, x, y;
-                indexAccess.read((u_char *)&i_imageId, sizeof(u_int32_t));
-                indexAccess.read((u_char *)&i_angle, sizeof(u_int16_t));
-                indexAccess.read((u_char *)&x, sizeof(u_int16_t));
-                indexAccess.read((u_char *)&y, sizeof(u_int16_t));
+                indexAccess.read((char *)&i_imageId, sizeof(u_int32_t));
+                indexAccess.read((char *)&i_angle, sizeof(u_int16_t));
+                indexAccess.read((char *)&x, sizeof(u_int16_t));
+                indexAccess.read((char *)&y, sizeof(u_int16_t));
                 hits[i].i_imageId = i_imageId;
                 hits[i].i_angle = i_angle;
                 hits[i].x = x;
@@ -561,12 +561,12 @@ u_int32_t ORBIndex::loadTags(string indexTagsPath)
         // Read the image tag.
         u_int32_t i_imageId;
         u_int32_t i_tagSize;
-        ifs.read((u_char *)&i_imageId, sizeof(u_int32_t));
+        ifs.read((char *)&i_imageId, sizeof(u_int32_t));
         if (ifs.eof())
             break;
-        ifs.read((u_char *)&i_tagSize, sizeof(u_int32_t));
-        u_char psz_tag[i_tagSize];
-        ifs.read((u_char *)psz_tag, i_tagSize);
+        ifs.read((char *)&i_tagSize, sizeof(u_int32_t));
+        char psz_tag[i_tagSize];
+        ifs.read((char *)psz_tag, i_tagSize);
 
         cout << i_imageId << " " << i_tagSize << " " << psz_tag << endl;
 
@@ -607,12 +607,12 @@ u_int32_t ORBIndex::writeTags(string indexTagsPath)
          it != tags.end(); ++it)
     {
         u_int32_t i_imageId = it->first;
-        const u_char *psz_tag = it->second.c_str();
+        const char *psz_tag = it->second.c_str();
         u_int32_t i_tagSize = strlen(psz_tag) + 1;
 
-        ofs.write((u_char *)(&i_imageId), sizeof(u_int32_t));
-        ofs.write((u_char *)(&i_tagSize), sizeof(u_int32_t));
-        ofs.write((u_char *)(psz_tag), i_tagSize);
+        ofs.write((char *)(&i_imageId), sizeof(u_int32_t));
+        ofs.write((char *)(&i_tagSize), sizeof(u_int32_t));
+        ofs.write((char *)(psz_tag), i_tagSize);
         cout << "plop!" << endl;
     }
 

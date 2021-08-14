@@ -35,9 +35,9 @@ ORBWordIndex::ORBWordIndex(string visualWordsPath)
 
     cout << "Building the word index." << endl;
 
-    cvflann::Matrix<unsigned u_char> m_features
-            ((unsigned u_char*)words->ptr<unsigned u_char>(0), words->rows, words->cols);
-    kdIndex = new cvflann::HierarchicalClusteringIndex<cvflann::Hamming<unsigned u_char> >
+    cvflann::Matrix<unsigned char> m_features
+            ((unsigned char*)words->ptr<unsigned char>(0), words->rows, words->cols);
+    kdIndex = new cvflann::HierarchicalClusteringIndex<cvflann::Hamming<unsigned char> >
             (m_features,cvflann::HierarchicalClusteringIndexParams(10, cvflann::FLANN_CENTERS_RANDOM, 8, 100));
     kdIndex->buildIndex();
 }
@@ -57,7 +57,7 @@ void ORBWordIndex::knnSearch(const Mat& query, vector<int>& indices,
 
     m_indices.init(indices.data(), dists.data());
 
-    kdIndex->findNeighbors(m_indices, (unsigned u_char*)query.ptr<unsigned u_char>(0),
+    kdIndex->findNeighbors(m_indices, (unsigned char*)query.ptr<unsigned char>(0),
                            cvflann::SearchParams(2000));
 }
 
@@ -82,14 +82,14 @@ bool ORBWordIndex::readVisualWords(string fileName)
         return false;
     }
 
-    unsigned u_char c;
+    unsigned char c;
     while (ifs.good())
     {
         Mat line(1, 32, CV_8U);
         for (unsigned i_col = 0; i_col < 32; ++i_col)
         {
-            ifs.read((u_char*)&c, sizeof(unsigned u_char));
-            line.at<unsigned u_char>(0, i_col) = c;
+            ifs.read((char*)&c, sizeof(unsigned char));
+            line.at<unsigned char>(0, i_col) = c;
         }
         if (!ifs.good())
             break;

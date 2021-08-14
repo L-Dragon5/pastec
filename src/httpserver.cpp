@@ -52,14 +52,14 @@ HTTPServer::~HTTPServer()
 }
 
 
-u_char *HTTPServer::loadFile(const u_char *filename)
+char *HTTPServer::loadFile(const char *filename)
 {
     ifstream file(filename, std::ios::binary);
     file.seekg(0, std::ios::end);
     std::streamsize size = file.tellg();
     file.seekg(0, std::ios::beg);
 
-    u_char *buffer = new(std::nothrow) u_char[size];
+    char *buffer = new(std::nothrow) char[size];
 
     if (buffer == NULL)
         return NULL;
@@ -76,8 +76,8 @@ u_char *HTTPServer::loadFile(const u_char *filename)
 
 int HTTPServer::run()
 {
-    u_char *key_pem;
-    u_char *cert_pem;
+    char *key_pem;
+    char *cert_pem;
 
     if (https)
     {
@@ -143,7 +143,7 @@ int HTTPServer::sendAnswer(struct MHD_Connection *connection, ConnectionInfo &co
     int ret;
     struct MHD_Response *response;
 
-    const u_char *buffer = conInfo.answerString.c_str();
+    const char *buffer = conInfo.answerString.c_str();
 
     response = MHD_create_response_from_buffer(strlen(buffer),
                                                (void *)buffer,
@@ -177,8 +177,8 @@ void HTTPServer::requestCompleted(void *cls, MHD_Connection *connection,
 
 
 int HTTPServer::answerToConnection(void *cls, MHD_Connection *connection,
-                                   const u_char *url, const u_char *method,
-                                   const u_char *version, const u_char *upload_data,
+                                   const char *url, const char *method,
+                                   const char *version, const char *upload_data,
                                    size_t *upload_data_size, void **conCls)
 {
     (void)version;
@@ -235,7 +235,7 @@ int HTTPServer::answerToConnection(void *cls, MHD_Connection *connection,
 
 
 int HTTPServer::readAuthHeader(void *cls, enum MHD_ValueKind kind,
-                               const u_char *key, const u_char *value)
+                               const char *key, const char *value)
 {
     (void) kind;
     ConnectionInfo *conInfo = (ConnectionInfo *)cls;

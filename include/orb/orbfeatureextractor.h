@@ -48,7 +48,7 @@ public:
     virtual ~ORBFeatureExtractor() {}
 
     u_int32_t processNewImage(unsigned i_imageId, unsigned i_imgSize,
-                              u_char *p_imgData, unsigned &i_nbFeaturesExtracted);
+                              char *p_imgData, unsigned &i_nbFeaturesExtracted);
 
 private:
     ORBIndex *index;
