@@ -48,7 +48,7 @@ void printUsage()
 
 int main(int argc, char** argv)
 {
-    cout << "Pastec Index v0.0.1" << endl;
+    cout << "Pastec Index v1.0.1" << endl;
 
     if (argc < 2)
     {

@@ -241,6 +241,7 @@ void RequestHandler::handleRequest(ConnectionInfo &conInfo)
             ret["image_ids"] = imageIds;
 
             // Return the bounding rects
+            /* Unneeded information
             Json::Value boundingRects(Json::arrayValue);
             for (unsigned i = 0; i < req.boundingRects.size(); ++i)
             {
@@ -251,6 +252,7 @@ void RequestHandler::handleRequest(ConnectionInfo &conInfo)
                 boundingRects.append(rVal);
             }
             ret["bounding_rects"] = boundingRects;
+            */
 
             // Return the scores
             Json::Value scores(Json::arrayValue);
@@ -259,10 +261,12 @@ void RequestHandler::handleRequest(ConnectionInfo &conInfo)
             ret["scores"] = scores;
 
             // Return the tags
+            /* Currently doesn't work
             Json::Value tags(Json::arrayValue);
             for (unsigned i = 0; i < req.tags.size(); ++i)
                 tags.append(req.tags[i]);
             ret["tags"] = tags;
+            */
         }
     }
     else if (testURIWithPattern(parsedURI, p_image)

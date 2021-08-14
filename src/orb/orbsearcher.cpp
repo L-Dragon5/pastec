@@ -110,10 +110,10 @@ public:
  */
 u_int32_t ORBSearcher::searchImage(SearchRequest &request)
 {
-    timeval t[3];
+    timeval t[2];
     gettimeofday(&t[0], NULL);
 
-    cout << "Loading the image and extracting the ORBs." << endl;
+    cout << "Processing image..." << endl;
 
     Mat img;
     u_int32_t i_ret = ImageLoader::loadImage(request.imageData.size(),
@@ -126,11 +126,6 @@ u_int32_t ORBSearcher::searchImage(SearchRequest &request)
 
     detector->detect(img, keypoints);
     descriptor->compute(img, keypoints, descriptors);
-
-    gettimeofday(&t[1], NULL);
-
-    cout << "time: " << getTimeDiff(t[0], t[1]) << " ms." << endl;
-    cout << "Looking for the visual words. " << endl;
 
     const unsigned i_nbTotalIndexedImages = index->getTotalNbIndexedImages();
     const unsigned i_maxNbOccurences = i_nbTotalIndexedImages > 10000 ?
@@ -168,8 +163,8 @@ u_int32_t ORBSearcher::searchImage(SearchRequest &request)
         }
     }
 
-    gettimeofday(&t[2], NULL);
-    cout << "time: " << getTimeDiff(t[1], t[2]) << " ms." << endl;
+    gettimeofday(&t[1], NULL);
+    cout << "Time spent: " << getTimeDiff(t[0], t[1]) << " ms." << endl;
 
     return processSimilar(request, imageReqHits);
 }
@@ -205,19 +200,13 @@ u_int32_t ORBSearcher::processSimilar(SearchRequest &request,
 {
     timeval t[7];
     gettimeofday(&t[0], NULL);
+    cout << "Getting images in index, comparing, and ranking..." << endl;
 
     const unsigned i_nbTotalIndexedImages = index->getTotalNbIndexedImages();
-
-    cout << imageReqHits.size() << " visual words kept for the request." << endl;
-    cout << i_nbTotalIndexedImages << " images indexed in the index." << endl;
 
     std::unordered_map<u_int32_t, vector<Hit> > indexHits; // key: visual word id, values: index hits.
     indexHits.rehash(imageReqHits.size());
     index->getImagesWithVisualWords(imageReqHits, indexHits);
-
-    gettimeofday(&t[1], NULL);
-    cout << "time: " << getTimeDiff(t[0], t[1]) << " ms." << endl;
-    cout << "Ranking the images." << endl;
 
     index->readLock();
     #define NB_RANKING_THREAD 4
@@ -236,17 +225,11 @@ u_int32_t ORBSearcher::processSimilar(SearchRequest &request,
             threads[i]->addWord(it->first);
     }
 
-    gettimeofday(&t[2], NULL);
-    cout << "init threads time: " << getTimeDiff(t[1], t[2]) << " ms." << endl;
-
     // Compute
     for (unsigned i = 0; i < NB_RANKING_THREAD; ++i)
         threads[i]->start();
     for (unsigned i = 0; i < NB_RANKING_THREAD; ++i)
         threads[i]->join();
-
-    gettimeofday(&t[3], NULL);
-    cout << "compute time: " << getTimeDiff(t[2], t[3]) << " ms." << endl;
 
     // Reduce...
     std::unordered_map<u_int32_t, float> weights; // key: image id, value: image score.
@@ -255,9 +238,6 @@ u_int32_t ORBSearcher::processSimilar(SearchRequest &request,
         for (std::unordered_map<u_int32_t, float>::const_iterator it = threads[i]->weights.begin();
             it != threads[i]->weights.end(); ++it)
             weights[it->first] += it->second;
-
-    gettimeofday(&t[4], NULL);
-    cout << "reduce time: " << getTimeDiff(t[3], t[4]) << " ms." << endl;
 
     // Free the memory
     for (unsigned i = 0; i < NB_RANKING_THREAD; ++i)
@@ -273,17 +253,12 @@ u_int32_t ORBSearcher::processSimilar(SearchRequest &request,
         rankedResults.push(SearchResult(it->second, it->first, Rect()));
     }
 
-    gettimeofday(&t[5], NULL);
-    cout << "rankedResult time: " << getTimeDiff(t[4], t[5]) << " ms." << endl;
-    cout << "Reranking 300 among " << rankedResults.size() << " images." << endl;
-
     priority_queue<SearchResult> rerankedResults;
     reranker.rerank(imageReqHits, indexHits,
                     rankedResults, rerankedResults, 300);
 
-    gettimeofday(&t[6], NULL);
-    cout << "time: " << getTimeDiff(t[5], t[6]) << " ms." << endl;
-    cout << "Returning the results. " << endl;
+    gettimeofday(&t[1], NULL);
+    cout << "Ranking time: " << getTimeDiff(t[0], t[1]) << " ms." << endl;
 
     returnResults(rerankedResults, request, 100);
 
@@ -309,16 +284,18 @@ void ORBSearcher::returnResults(priority_queue<SearchResult> &rankedResults,
         const SearchResult &res = rankedResults.top();
         imageIds.push_back(res.i_imageId);
         i_res++;
-        cout << "Id: " << res.i_imageId << ", score: " << res.f_weight << endl;
+        // cout << "Id: " << res.i_imageId << ", score: " << res.f_weight << endl;
         req.results.push_back(res.i_imageId);
-        req.boundingRects.push_back(res.boundingRect);
+        // req.boundingRects.push_back(res.boundingRect);
         req.scores.push_back(res.f_weight);
 
+        /* Tags not needed
         string tag;
         if (index->getTag(res.i_imageId, tag) == OK)
             req.tags.push_back(tag);
         else
             req.tags.push_back("");
+        */
 
         rankedResults.pop();
     }
