@@ -61,14 +61,24 @@ Finally, run make to compile Pastec:
 
 ## Full Installation Instructions
 <pre data-language="shell">
+sudo su
 apt-get update
-apt-get install -y curl wget libcurl4-openssl-dev libopencv-dev libmicrohttpd-dev libjsoncpp-dev cmake git
+apt-get install -y curl wget libcurl4-openssl-dev libmicrohttpd-dev libjsoncpp-dev cmake git build-essential pkg-config libgtk-3-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev gfortran openexr libatlas-base-dev libtbb2 libtbb-dev libdc1394-22-dev libopenexr-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+
+mkdir ~/opencv_build && cd ~/opencv_build
+git clone https://github.com/opencv/opencv.git
+git clone https://github.com/opencv/opencv_contrib.git
+cd ~/opencv_build/opencv
+mkdir -p build && cd build
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_GENERATE_PKGCONFIG=ON -D OPENCV_EXTRA_MODULES_PATH=~/opencv_build/opencv_contrib/modules
+make -j{nproc}
+make install
+
 git clone https://github.com/L-Dragon5/pastec.git /pastec
 mkdir -p /pastec/build && mkdir /pastec/data
 cd /pastec/build
 cmake ../ && make
-cp /pastec/visualWordsORB.dat /pastec/data
-./pastec -p 4212 /pastec/data/visualWordsORB.dat
+./pastec -p 4212 /pastec/visualWordsORB.dat
 </pre>
 
 ## Running
@@ -225,7 +235,7 @@ This call erases all the data currently contained in the index.
 *   **Example:**
     *   Command line:
 
-        <pre data-language="shell">curl -X POST -d '{"type":"CLEAR"}' http://127.0.0.1:4212/index/io
+        <pre data-language="shell">curl -X POST -d '{"type":"CLEAR"}' http://localhost:4212/index/io
         </pre>
 
     *   Answer:
@@ -247,7 +257,7 @@ This call loads the index data in a provided path.
 *   **Example:**
     *   Command line:
 
-        <pre data-language="shell">curl -X POST -d '{"type":"LOAD", "index_path":"test.dat"}' http://127.0.0.1:4212/index/io
+        <pre data-language="shell">curl -X POST -d '{"type":"LOAD", "index_path":"test.dat"}' http://localhost:4212/index/io
         </pre>
 
     *   Answer:
@@ -269,7 +279,7 @@ This call saves the index data in a specified path.
 *   **Example:**
     *   Command line:
 
-        <pre data-language="shell">curl -X POST -d '{"type":"WRITE", "index_path":"test.dat"}' http://127.0.0.1:4212/index/io
+        <pre data-language="shell">curl -X POST -d '{"type":"WRITE", "index_path":"test.dat"}' http://localhost:4212/index/io
         </pre>
 
     *   Answer:
