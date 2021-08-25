@@ -70,15 +70,15 @@ git clone https://github.com/opencv/opencv.git
 git clone https://github.com/opencv/opencv_contrib.git
 cd ~/opencv_build/opencv
 mkdir -p build && cd build
-cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_GENERATE_PKGCONFIG=ON -D OPENCV_EXTRA_MODULES_PATH=~/opencv_build/opencv_contrib/modules
-make -j{nproc}
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_GENERATE_PKGCONFIG=ON -D OPENCV_EXTRA_MODULES_PATH=~/opencv_build/opencv_contrib/modules ..
+make -j (run nproc to get number of cores)
 make install
 
-git clone https://github.com/L-Dragon5/pastec.git /pastec
-mkdir -p /pastec/build && mkdir /pastec/data
-cd /pastec/build
+git clone https://github.com/L-Dragon5/pastec.git ~/pastec
+mkdir -p ~/pastec/build
+cd ~/pastec/build
 cmake ../ && make
-./pastec -p 4212 /pastec/visualWordsORB.dat
+./pastec -p 4212 ~/pastec/visualWordsORB.dat
 </pre>
 
 ## Running
